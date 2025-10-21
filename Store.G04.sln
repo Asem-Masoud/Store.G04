@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.G04.Services.Abstract
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{6002C025-78EC-4CE3-9E4D-17C34676A19E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.G04.Persistense", "Infrastructure\Persistense\Store.G04.Persistense.csproj", "{A360025A-8F82-43D0-88D0-DE2C17A8E081}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.G04.Persistence", "Infrastructure\Persistense\Store.G04.Persistence.csproj", "{A360025A-8F82-43D0-88D0-DE2C17A8E081}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Store.G04.Presentation", "Infrastructure\Store.G04.Presentation\Store.G04.Presentation.csproj", "{83F74CA9-AD88-4ECF-866B-8D7A399E5174}"
 EndProject
