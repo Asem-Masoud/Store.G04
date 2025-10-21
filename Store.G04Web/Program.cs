@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Store.G04.Domain.Contracts;
 using Store.G04.Persistence;
 using Store.G04.Persistence.Data.Contexts;
+using Store.G04.Services.Mapping.Products;
 using System.Threading.Tasks;
 
 namespace Store.G04Web
@@ -27,6 +28,9 @@ namespace Store.G04Web
             });
 
             builder.Services.AddScoped<IDbInitializer, DbInitialize>(); // Initialize Db
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
+
 
             var app = builder.Build();
 
