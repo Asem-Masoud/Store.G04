@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Store.G04.Domain.Contracts;
+using Store.G04.Persistence;
 using Store.G04.Persistence.Data.Contexts;
+using System.Threading.Tasks;
 
 namespace Store.G04Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,16 @@ namespace Store.G04Web
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddScoped<IDbInitializer, DbInitialize>(); // Initialize Db
+
             var app = builder.Build();
+
+            #region Initialize Db
+            using var scope = app.Services.CreateScope();
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>(); // ASK CLR to Create object From IDbInitializer
+            await dbInitializer.InitializeAsync();
+            #endregion
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
