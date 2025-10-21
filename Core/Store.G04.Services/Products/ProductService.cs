@@ -19,17 +19,18 @@ namespace Store.G04.Services.Products
             var result = _mapper.Map<IEnumerable<ProductResponse>>(Products);
             return result;
         }
+
         public async Task<ProductResponse> GetProductByIdAsync(int id)
         {
-            var product = await _unitOfWork.GetRepository<int, ProductType>().GetAsync(id);
+            var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(id);
             var result = _mapper.Map<ProductResponse>(product);
             return result;
         }
 
         public async Task<IEnumerable<BrandTypeResponse>> GetAllBrandsAsync()
         {
-            var Brands = await _unitOfWork.GetRepository<int, ProductBrand>().GetAllAsync();
-            var result = _mapper.Map<IEnumerable<BrandTypeResponse>>(Brands);
+            var brands = await _unitOfWork.GetRepository<int, ProductBrand>().GetAllAsync();
+            var result = _mapper.Map<IEnumerable<BrandTypeResponse>>(brands);
             return result;
         }
 
