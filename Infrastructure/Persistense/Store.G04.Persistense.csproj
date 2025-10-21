@@ -10,4 +10,12 @@
 		<ProjectReference Include="..\..\Core\Store.G04.Services\Store.G04.Services.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Folder Include="Data\Configurations\" />
+		<Folder Include="Repositories\" />
+	</ItemGroup>
+
 </Project>
+
+
+
