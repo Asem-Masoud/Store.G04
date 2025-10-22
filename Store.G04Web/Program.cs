@@ -1,12 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Store.G04.Domain.Contracts;
 using Store.G04.Persistence;
 using Store.G04.Persistence.Data.Contexts;
 using Store.G04.Services;
 using Store.G04.Services.Abstractions;
 using Store.G04.Services.Mapping.Products;
-using System.Threading.Tasks;
 
 namespace Store.G04Web
 {
@@ -32,7 +30,7 @@ namespace Store.G04Web
             builder.Services.AddScoped<IDbInitializer, DbInitialize>(); // Initialize Db
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IServiceManger, ServiceManger>();
-            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile(builder.Configuration)));
 
 
             var app = builder.Build();
@@ -43,6 +41,7 @@ namespace Store.G04Web
             await dbInitializer.InitializeAsync();
             #endregion
 
+            app.UseStaticFiles();  // For wwwroot folder
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

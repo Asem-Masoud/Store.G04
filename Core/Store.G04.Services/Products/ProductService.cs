@@ -2,12 +2,8 @@
 using Store.G04.Domain.Contracts;
 using Store.G04.Domain.Entities.Products;
 using Store.G04.Services.Abstractions.Products;
+using Store.G04.Services.Specifications.Products;
 using Store.G04.Shared.Dtos.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Store.G04.Services.Products
 {
@@ -15,14 +11,29 @@ namespace Store.G04.Services.Products
     {
         public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync()
         {
-            var Products = await _unitOfWork.GetRepository<int, Product>().GetAllAsync();
+            /*
+            // Apply Specifications to Include Related Data
+            var spec = new Specifications.BaseSpecifications<int, Product>(null);
+            spec.Includes.Add(p => p.Brand);
+            spec.Includes.Add(p => p.Type);
+            */
+
+            var spec = new ProductsWithBrandAndTypeSpecification();
+            // Get All Products Through ProductRepository
+            // var Products = await _unitOfWork.GetRepository<int, Product>().GetAllAsync();
+            var Products = await _unitOfWork.GetRepository<int, Product>().GetAllAsync(spec); // Apply Specifications
+
+            //Mapping IEnumerable<Product> To IEnumerable<ProductResponse> Using AutoMapper
             var result = _mapper.Map<IEnumerable<ProductResponse>>(Products);
             return result;
         }
 
         public async Task<ProductResponse> GetProductByIdAsync(int id)
         {
-            var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(id);
+            var spec = new ProductsWithBrandAndTypeSpecification(id); // Apply Specifications
+
+            //var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(id);
+            var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(spec); // Apply Specifications
             var result = _mapper.Map<ProductResponse>(product);
             return result;
         }
@@ -40,6 +51,5 @@ namespace Store.G04.Services.Products
             var result = _mapper.Map<IEnumerable<BrandTypeResponse>>(Types);
             return result;
         }
-
     }
 }
