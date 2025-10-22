@@ -13,10 +13,6 @@ namespace Store.G04.Services.Specifications
     {
         public List<Expression<Func<TEntity, object>>> Includes { get; set; } = new List<Expression<Func<TEntity, object>>>();
         public Expression<Func<TEntity, bool>>? Criteria { get; set; }
-
-        public BaseSpecifications(Expression<Func<TEntity, bool>>? expression)
-        {
-            Criteria = expression;
-        }
+        public BaseSpecifications(Expression<Func<TEntity, bool>>? expression) { Criteria = expression; }
     }
 }
