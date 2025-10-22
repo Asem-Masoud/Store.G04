@@ -32,7 +32,7 @@ namespace Store.G04Web
             builder.Services.AddScoped<IDbInitializer, DbInitialize>(); // Initialize Db
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IServiceManger, ServiceManger>();
-            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile(builder.Configuration)));
 
 
             var app = builder.Build();
