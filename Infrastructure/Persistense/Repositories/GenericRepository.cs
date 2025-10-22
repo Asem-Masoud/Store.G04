@@ -31,7 +31,6 @@ namespace Store.G04.Persistence.Repositories
             if (typeof(TEntity) == typeof(Product))
             {
                 return await _context.Products.Include(P => P.Brand).Include(P => P.Type).Where(P => P.Id == key as int?).FirstOrDefaultAsync() as TEntity;
-
             }
             return await _context.Set<TEntity>().FindAsync(key);
         }
@@ -49,6 +48,21 @@ namespace Store.G04.Persistence.Repositories
         public void Delete(TEntity entity)
         {
             _context.Set<TEntity>().Remove(entity);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TKey, TEntity> spec, bool changeTracker = false)
+        {
+            return await ApplySpecifications(spec).ToListAsync();
+        }
+
+        public async Task<TEntity?> GetAsync(ISpecifications<TKey, TEntity> spec)
+        {
+            return await ApplySpecifications(spec).FirstOrDefaultAsync();
+        }
+
+        private IQueryable<TEntity> ApplySpecifications(ISpecifications<TKey, TEntity> spec)
+        {
+            return SpecificationsEvaluator.GetQuery(_context.Set<TEntity>(), spec);
         }
     }
 }

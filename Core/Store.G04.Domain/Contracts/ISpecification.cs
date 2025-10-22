@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Store.G04.Domain.Contracts
 {
-    public interface ISpecification<TKey, TEntity> where TEntity : BaseEntity<TKey>
+    public interface ISpecifications<TKey, TEntity> where TEntity : BaseEntity<TKey>
     {
         List<Expression<Func<TEntity, object>>> Includes { get; set; }
 

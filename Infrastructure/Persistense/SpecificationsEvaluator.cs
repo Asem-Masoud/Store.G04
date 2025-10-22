@@ -13,7 +13,7 @@ namespace Store.G04.Persistence
     {
         // _context.Products.Include(P => P.Brand).Include(P => P.Type).Where(P => P.Id == key as int?).FirstOrDefaultAsync() as TEntity;
         // Generate Dynamic Query
-        public static IQueryable<TEntity> GetQuery<TKey, TEntity>(IQueryable<TEntity> inputQuery, ISpecification<TKey, TEntity> spec) where TEntity : BaseEntity<TKey>
+        public static IQueryable<TEntity> GetQuery<TKey, TEntity>(IQueryable<TEntity> inputQuery, ISpecifications<TKey, TEntity> spec) where TEntity : BaseEntity<TKey>
         {
             var query = inputQuery; // _context.Products
             if (spec.Criteria is not null)
