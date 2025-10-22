@@ -1,17 +1,9 @@
-﻿
-using Store.G04.Domain.Entities.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Store.G04.Domain.Entities.Products;
 
 namespace Store.G04.Services.Specifications.Products
 {
     public class ProductsWithBrandAndTypeSpecification : BaseSpecifications<int, Product>
     {
-
         //public ProductsWithBrandAndTypeSpecification(Expression<Func<Product, bool>>? expression) : base(expression)
         //{
         //    Includes.Add(p => p.Brand);

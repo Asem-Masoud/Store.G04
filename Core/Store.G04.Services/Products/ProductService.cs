@@ -4,11 +4,6 @@ using Store.G04.Domain.Entities.Products;
 using Store.G04.Services.Abstractions.Products;
 using Store.G04.Services.Specifications.Products;
 using Store.G04.Shared.Dtos.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Store.G04.Services.Products
 {
@@ -37,7 +32,6 @@ namespace Store.G04.Services.Products
         {
             var spec = new ProductsWithBrandAndTypeSpecification(id); // Apply Specifications
 
-
             //var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(id);
             var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(spec); // Apply Specifications
             var result = _mapper.Map<ProductResponse>(product);
@@ -57,6 +51,5 @@ namespace Store.G04.Services.Products
             var result = _mapper.Map<IEnumerable<BrandTypeResponse>>(Types);
             return result;
         }
-
     }
 }

@@ -2,12 +2,7 @@
 using Store.G04.Domain.Entities;
 using Store.G04.Persistence.Data.Contexts;
 using Store.G04.Persistence.Repositories;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Store.G04.Persistence
 {

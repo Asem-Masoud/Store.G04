@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Extensibility;
 using Store.G04.Domain.Contracts;
 using Store.G04.Domain.Entities.Products;
 using Store.G04.Persistence.Data.Contexts;

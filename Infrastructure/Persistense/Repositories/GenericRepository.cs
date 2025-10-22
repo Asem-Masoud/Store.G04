@@ -3,11 +3,6 @@ using Store.G04.Domain.Contracts;
 using Store.G04.Domain.Entities;
 using Store.G04.Domain.Entities.Products;
 using Store.G04.Persistence.Data.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Store.G04.Persistence.Repositories
 {

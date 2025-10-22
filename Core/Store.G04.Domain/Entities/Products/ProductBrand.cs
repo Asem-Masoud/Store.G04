@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Store.G04.Domain.Entities.Products
+﻿namespace Store.G04.Domain.Entities.Products
 {
     public class ProductBrand : BaseEntity<int>
     {

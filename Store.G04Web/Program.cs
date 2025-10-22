@@ -1,12 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Store.G04.Domain.Contracts;
 using Store.G04.Persistence;
 using Store.G04.Persistence.Data.Contexts;
 using Store.G04.Services;
 using Store.G04.Services.Abstractions;
 using Store.G04.Services.Mapping.Products;
-using System.Threading.Tasks;
 
 namespace Store.G04Web
 {
