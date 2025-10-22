@@ -43,6 +43,7 @@ namespace Store.G04Web
             await dbInitializer.InitializeAsync();
             #endregion
 
+            app.UseStaticFiles();  // For wwwroot folder
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

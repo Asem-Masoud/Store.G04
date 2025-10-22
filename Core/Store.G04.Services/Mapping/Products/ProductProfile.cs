@@ -15,7 +15,9 @@ namespace Store.G04.Services.Mapping.Products
         {
             CreateMap<Product, ProductResponse>()
                 .ForMember(D => D.Brand, O => O.MapFrom(src => src.Brand.Name))
-                .ForMember(D => D.Type, O => O.MapFrom(src => src.Type.Name));
+                .ForMember(D => D.Type, O => O.MapFrom(src => src.Type.Name))
+                .ForMember(D => D.PictureUrl, O => O.MapFrom(S => $"https://localhost:7282/{S.PictureUrl}"))
+                ;
 
             CreateMap<ProductBrand, ProductResponse>();
 
