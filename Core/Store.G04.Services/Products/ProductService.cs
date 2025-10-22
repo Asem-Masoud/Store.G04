@@ -15,7 +15,10 @@ namespace Store.G04.Services.Products
     {
         public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync()
         {
+            // Get All Products Through ProductRepository
             var Products = await _unitOfWork.GetRepository<int, Product>().GetAllAsync();
+
+            //Mapping IEnumerable<Product> To IEnumerable<ProductResponse> Using AutoMapper
             var result = _mapper.Map<IEnumerable<ProductResponse>>(Products);
             return result;
         }
