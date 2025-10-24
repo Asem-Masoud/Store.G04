@@ -15,7 +15,7 @@ namespace Store.G04.Services.Specifications.Products
         }
 
         // null & null
-        public ProductsWithBrandAndTypeSpecification(int? brandId, int? typeId, string? sort, string? search) : base
+        public ProductsWithBrandAndTypeSpecification(int? brandId, int? typeId, string? sort, string? search, int? pageIndex, int? pageSize) : base
             (
             P =>
             (!brandId.HasValue || P.BrandId == brandId)
@@ -26,6 +26,14 @@ namespace Store.G04.Services.Specifications.Products
             )
 
         {
+            // Paging
+            // PageSize = 5
+            // PageIndex = 3
+            // Skip: 2 +5 (PageIndex-1) * pageSize
+
+            // Take : 5
+            ApplyPagination(pageSize.Value, pageIndex.Value);
+
             // Sorting
             /*
               if (!string.IsNullOrEmpty(sort))
