@@ -5,6 +5,7 @@ namespace Store.G04.Services.Specifications.Products
 {
     public class ProductsWithBrandAndTypeSpecification : BaseSpecifications<int, Product>
     {
+        //
         //public ProductsWithBrandAndTypeSpecification(Expression<Func<Product, bool>>? expression) : base(expression)
         //{
         //    Includes.Add(p => p.Brand);
@@ -82,12 +83,13 @@ namespace Store.G04.Services.Specifications.Products
             {
                 AddOrderBy(p => p.Name);
             }
-
         }
+
         private void ApplyIncludes()
         {
             Includes.Add(p => p.Brand);
             Includes.Add(p => p.Type);
         }
+
     }
 }

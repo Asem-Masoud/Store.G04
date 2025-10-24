@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Store.G04.Shared.Dtos.Products
+﻿namespace Store.G04.Shared.Dtos.Products
 {
     public class ProductQueryParameters
     {
@@ -14,7 +8,5 @@ namespace Store.G04.Shared.Dtos.Products
         public string? Search { get; set; }
         public int PageSize { get; set; } = 5;
         public int PageIndex { get; set; } = 1;
-
-
     }
 }

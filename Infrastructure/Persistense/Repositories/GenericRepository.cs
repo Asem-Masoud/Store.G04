@@ -64,5 +64,6 @@ namespace Store.G04.Persistence.Repositories
         {
             return SpecificationsEvaluator.GetQuery(_context.Set<TEntity>(), spec);
         }
+
     }
 }

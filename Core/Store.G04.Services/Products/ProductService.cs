@@ -59,5 +59,6 @@ namespace Store.G04.Services.Products
             var result = _mapper.Map<IEnumerable<BrandTypeResponse>>(Types);
             return result;
         }
+
     }
 }

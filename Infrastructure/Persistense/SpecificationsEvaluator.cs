@@ -39,5 +39,6 @@ namespace Store.G04.Persistence
 
             return query;
         }
+
     }
 }

@@ -9,6 +9,5 @@ namespace Store.G04.Services.Abstractions.Products
         Task<ProductResponse> GetProductByIdAsync(int id);
         Task<IEnumerable<BrandTypeResponse>> GetAllBrandsAsync();
         Task<IEnumerable<BrandTypeResponse>> GetAllTypesAsync();
-
     }
 }

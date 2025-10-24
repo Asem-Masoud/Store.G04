@@ -1,17 +1,11 @@
 ﻿using Store.G04.Domain.Entities.Products;
 using Store.G04.Shared.Dtos.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Store.G04.Services.Specifications.Products
 {
     public class ProductsCountSpecification : BaseSpecifications<int, Product>
     {
         public ProductsCountSpecification(ProductQueryParameters parameters) : base
-
             (
               P =>
             (!parameters.BrandId.HasValue || P.BrandId == parameters.BrandId)
@@ -24,5 +18,6 @@ namespace Store.G04.Services.Specifications.Products
         {
 
         }
+
     }
 }
