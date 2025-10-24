@@ -9,7 +9,7 @@ namespace Store.G04.Services.Products
 {
     public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
     {
-        public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync(int? brandId, int? typeId, string? sort)
+        public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync(int? brandId, int? typeId, string? sort, string? search)
         {
             /*
             // Apply Specifications to Include Related Data
@@ -18,7 +18,7 @@ namespace Store.G04.Services.Products
             spec.Includes.Add(p => p.Type);
             */
 
-            var spec = new ProductsWithBrandAndTypeSpecification(brandId, typeId, sort);
+            var spec = new ProductsWithBrandAndTypeSpecification(brandId, typeId, sort, search);
 
 
             // Get All Products Through ProductRepository
