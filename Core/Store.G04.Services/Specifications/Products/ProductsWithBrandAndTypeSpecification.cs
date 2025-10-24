@@ -14,7 +14,15 @@ namespace Store.G04.Services.Specifications.Products
             ApplyIncludes();
         }
 
-        public ProductsWithBrandAndTypeSpecification() : base(null)
+        // null & null
+        public ProductsWithBrandAndTypeSpecification(int? brandId, int? typeId) : base
+            (
+            P =>
+            (!brandId.HasValue || P.BrandId == brandId)
+            &&
+            (!typeId.HasValue || P.TypeId == typeId)
+            )
+
         {
             ApplyIncludes();
         }
