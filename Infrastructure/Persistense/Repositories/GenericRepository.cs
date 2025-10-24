@@ -13,7 +13,7 @@ namespace Store.G04.Persistence.Repositories
             if (typeof(TEntity) == typeof(Product))
             {
                 return changeTracker ?
-                await _context.Products.Include(P => P.Brand).Include(P => P.Type).ToListAsync() as IEnumerable<TEntity>
+                await _context.Products.Skip(5 * 19).Take(5).Include(P => P.Brand).Include(P => P.Type).ToListAsync() as IEnumerable<TEntity>
                 : await _context.Products.Include(P => P.Brand).Include(P => P.Type).AsNoTracking().ToListAsync() as IEnumerable<TEntity>;
             }
             return changeTracker ?
@@ -55,9 +55,15 @@ namespace Store.G04.Persistence.Repositories
             return await ApplySpecifications(spec).FirstOrDefaultAsync();
         }
 
+        public async Task<int> CountAsync(ISpecifications<TKey, TEntity> spec)
+        {
+            return await ApplySpecifications(spec).CountAsync();
+        }
+
         private IQueryable<TEntity> ApplySpecifications(ISpecifications<TKey, TEntity> spec)
         {
             return SpecificationsEvaluator.GetQuery(_context.Set<TEntity>(), spec);
         }
+
     }
 }

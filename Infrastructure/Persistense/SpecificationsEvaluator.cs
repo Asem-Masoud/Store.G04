@@ -27,15 +27,18 @@ namespace Store.G04.Persistence
             {
                 query = query.OrderByDescending(spec.OrderByDescending); // _context.Products.Where(P => P.Id == 12).OrderByDescending(P => P.Name)
             }
-            else
-            {
 
+            if (spec.IsPagination)
+            {
+                query = query.Skip(spec.Skip).Take(spec.Take); // _context.Products.Where(P => P.Id == 12).OrderBy(P => P.Name).Skip(0).Take(5)
             }
+
             //  _context.Products.Where(P => P.Id == 12).Include(P => P.Brand)
             //  _context.Products.Where(P => P.Id == 12).Include(P => P.Brand).Include(P => P.Type)
             query = spec.Includes.Aggregate(query, (query, includeExpression) => query.Include(includeExpression));
 
             return query;
         }
+
     }
 }

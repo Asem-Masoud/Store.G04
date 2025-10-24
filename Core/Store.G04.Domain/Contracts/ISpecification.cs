@@ -9,7 +9,12 @@ namespace Store.G04.Domain.Contracts
 
         Expression<Func<TEntity, bool>>? Criteria { get; set; } // For Filtration
 
-        public Expression<Func<TEntity, object>>? OrderBy { get; set; }
-        public Expression<Func<TEntity, object>>? OrderByDescending { get; set; }
+        Expression<Func<TEntity, object>>? OrderBy { get; set; }
+
+        Expression<Func<TEntity, object>>? OrderByDescending { get; set; }
+
+        int Skip { get; set; }
+        int Take { get; set; }
+        bool IsPagination { get; set; }
     }
 }

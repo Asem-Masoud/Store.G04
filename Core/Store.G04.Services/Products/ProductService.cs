@@ -3,13 +3,14 @@ using Store.G04.Domain.Contracts;
 using Store.G04.Domain.Entities.Products;
 using Store.G04.Services.Abstractions.Products;
 using Store.G04.Services.Specifications.Products;
+using Store.G04.Shared;
 using Store.G04.Shared.Dtos.Products;
 
 namespace Store.G04.Services.Products
 {
     public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
     {
-        public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync(int? brandId, int? typeId, string? sort, string? search)
+        public async Task<PaginationResponse<ProductResponse>> GetAllProductsAsync(ProductQueryParameters parameters)
         {
             /*
             // Apply Specifications to Include Related Data
@@ -18,8 +19,7 @@ namespace Store.G04.Services.Products
             spec.Includes.Add(p => p.Type);
             */
 
-            var spec = new ProductsWithBrandAndTypeSpecification(brandId, typeId, sort, search);
-
+            var spec = new ProductsWithBrandAndTypeSpecification(parameters);
 
             // Get All Products Through ProductRepository
             // var Products = await _unitOfWork.GetRepository<int, Product>().GetAllAsync();
@@ -27,7 +27,13 @@ namespace Store.G04.Services.Products
 
             //Mapping IEnumerable<Product> To IEnumerable<ProductResponse> Using AutoMapper
             var result = _mapper.Map<IEnumerable<ProductResponse>>(Products);
-            return result;
+
+            // Pagination Response
+            var specCount = new ProductsCountSpecification(parameters);
+            //var count = Products.Count();
+            var count = await _unitOfWork.GetRepository<int, Product>().CountAsync(specCount);
+            //return result;
+            return new PaginationResponse<ProductResponse>(parameters.PageIndex, parameters.PageSize, 0, result);
         }
 
         public async Task<ProductResponse> GetProductByIdAsync(int id)
@@ -53,5 +59,6 @@ namespace Store.G04.Services.Products
             var result = _mapper.Map<IEnumerable<BrandTypeResponse>>(Types);
             return result;
         }
+
     }
 }
