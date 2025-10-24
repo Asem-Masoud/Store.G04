@@ -3,13 +3,14 @@ using Store.G04.Domain.Contracts;
 using Store.G04.Domain.Entities.Products;
 using Store.G04.Services.Abstractions.Products;
 using Store.G04.Services.Specifications.Products;
+using Store.G04.Shared;
 using Store.G04.Shared.Dtos.Products;
 
 namespace Store.G04.Services.Products
 {
     public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
     {
-        public async Task<IEnumerable<ProductResponse>> GetAllProductsAsync(ProductQueryParameters parameters)
+        public async Task<PaginationResponse<ProductResponse>> GetAllProductsAsync(ProductQueryParameters parameters)
         {
             /*
             // Apply Specifications to Include Related Data
@@ -20,14 +21,19 @@ namespace Store.G04.Services.Products
 
             var spec = new ProductsWithBrandAndTypeSpecification(parameters);
 
-
             // Get All Products Through ProductRepository
             // var Products = await _unitOfWork.GetRepository<int, Product>().GetAllAsync();
             var Products = await _unitOfWork.GetRepository<int, Product>().GetAllAsync(spec); // Apply Specifications
 
             //Mapping IEnumerable<Product> To IEnumerable<ProductResponse> Using AutoMapper
             var result = _mapper.Map<IEnumerable<ProductResponse>>(Products);
-            return result;
+
+            // Pagination Response
+            var specCount = new ProductsCountSpecification(parameters);
+            //var count = Products.Count();
+            var count = await _unitOfWork.GetRepository<int, Product>().CountAsync(specCount);
+            //return result;
+            return new PaginationResponse<ProductResponse>(parameters.PageIndex, parameters.PageSize, 0, result);
         }
 
         public async Task<ProductResponse> GetProductByIdAsync(int id)
