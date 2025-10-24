@@ -14,11 +14,67 @@ namespace Store.G04.Services.Specifications.Products
             ApplyIncludes();
         }
 
-        public ProductsWithBrandAndTypeSpecification() : base(null)
+        // null & null
+        public ProductsWithBrandAndTypeSpecification(int? brandId, int? typeId, string? sort, string? search) : base
+            (
+            P =>
+            (!brandId.HasValue || P.BrandId == brandId)
+            &&
+            (!typeId.HasValue || P.TypeId == typeId)
+            &&
+            (string.IsNullOrEmpty(search) || P.Name.ToLower().Contains(search.ToLower()))
+            )
+
         {
+            // Sorting
+            /*
+              if (!string.IsNullOrEmpty(sort))
+            {
+                switch (sort.ToLower())
+                {
+                    case "priceasc":
+                        AddOrderBy(p => p.Price);
+                        break;
+                    case "pricedesc":
+                        AddOrderByDescending(p => p.Price);
+                        break;
+                    default:
+                        AddOrderBy(p => p.Name);
+                        break;
+                }
+            }
+            else
+            {
+                AddOrderBy(p => p.Name);
+            }
+            */
+            ApplySorting(sort);
             ApplyIncludes();
         }
 
+        private void ApplySorting(string? sort)
+        {
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch (sort.ToLower())
+                {
+                    case "priceasc":
+                        AddOrderBy(p => p.Price);
+                        break;
+                    case "pricedesc":
+                        AddOrderByDescending(p => p.Price);
+                        break;
+                    default:
+                        AddOrderBy(p => p.Name);
+                        break;
+                }
+            }
+            else
+            {
+                AddOrderBy(p => p.Name);
+            }
+
+        }
         private void ApplyIncludes()
         {
             Includes.Add(p => p.Brand);
