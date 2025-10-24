@@ -1,4 +1,5 @@
 ﻿using Store.G04.Domain.Entities.Products;
+using Store.G04.Shared.Dtos.Products;
 
 namespace Store.G04.Services.Specifications.Products
 {
@@ -15,14 +16,14 @@ namespace Store.G04.Services.Specifications.Products
         }
 
         // null & null
-        public ProductsWithBrandAndTypeSpecification(int? brandId, int? typeId, string? sort, string? search, int? pageIndex, int? pageSize) : base
+        public ProductsWithBrandAndTypeSpecification(ProductQueryParameters parameters) : base
             (
             P =>
-            (!brandId.HasValue || P.BrandId == brandId)
+            (!parameters.BrandId.HasValue || P.BrandId == parameters.BrandId)
             &&
-            (!typeId.HasValue || P.TypeId == typeId)
+            (!parameters.TypeId.HasValue || P.TypeId == parameters.TypeId)
             &&
-            (string.IsNullOrEmpty(search) || P.Name.ToLower().Contains(search.ToLower()))
+            (string.IsNullOrEmpty(parameters.Search) || P.Name.ToLower().Contains(parameters.Search.ToLower()))
             )
 
         {
@@ -32,7 +33,7 @@ namespace Store.G04.Services.Specifications.Products
             // Skip: 2 +5 (PageIndex-1) * pageSize
 
             // Take : 5
-            ApplyPagination(pageSize.Value, pageIndex.Value);
+            ApplyPagination(parameters.PageSize, parameters.PageIndex);
 
             // Sorting
             /*
@@ -56,7 +57,7 @@ namespace Store.G04.Services.Specifications.Products
                 AddOrderBy(p => p.Name);
             }
             */
-            ApplySorting(sort);
+            ApplySorting(parameters.Sort);
             ApplyIncludes();
         }
 

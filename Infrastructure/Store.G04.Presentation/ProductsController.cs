@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Store.G04.Services.Abstractions;
+using Store.G04.Shared.Dtos.Products;
 
 namespace Store.G04.Presentation
 {
@@ -8,9 +9,9 @@ namespace Store.G04.Presentation
     public class ProductsController(IServiceManger _serviceManger) : ControllerBase
     {
         [HttpGet] // GET: baseUrl/api/products
-        public async Task<IActionResult> GetAllProducts(int? brandId, int? typeId, string? sort, string? search, int? pageIndex = 1, int? pageSize = 5)
+        public async Task<IActionResult> GetAllProducts([FromQuery] ProductQueryParameters parameters)
         {
-            var result = await _serviceManger.ProductService.GetAllProductsAsync(brandId, typeId, sort, search, pageIndex, pageSize);
+            var result = await _serviceManger.ProductService.GetAllProductsAsync(parameters);
             if (result is null) return BadRequest(); //400
             return Ok(result); //200
         }
