@@ -5,6 +5,7 @@ using Store.G04.Persistence.Data.Contexts;
 using Store.G04.Services;
 using Store.G04.Services.Abstractions;
 using Store.G04.Services.Mapping.Products;
+using Store.G04Web.Middlewares;
 
 namespace Store.G04Web
 {
@@ -21,7 +22,6 @@ namespace Store.G04Web
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
             builder.Services.AddDbContext<StoreDbContext>(Options =>
             {
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -32,7 +32,6 @@ namespace Store.G04Web
             builder.Services.AddScoped<IServiceManger, ServiceManger>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile(builder.Configuration)));
 
-
             var app = builder.Build();
 
             #region Initialize Db
@@ -41,7 +40,7 @@ namespace Store.G04Web
             await dbInitializer.InitializeAsync();
             #endregion
 
-            app.UseStaticFiles();  // For wwwroot folder
+            app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -50,10 +49,11 @@ namespace Store.G04Web
                 app.UseSwaggerUI();
             }
 
+            app.UseStaticFiles();  // For wwwroot folder
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
