@@ -27,8 +27,8 @@ namespace Store.G04.Presentation
             return BadRequest();//400
         }
 
-        [HttpGet(template: "badrequest/{id}")] // GET: api/Buggy/badrequest/ahmed
-        public IActionResult GetBadTRequest(int id) // validation erroe
+        [HttpGet(template: "badrequest/{id}/{age}")] // GET: api/Buggy/badrequest/ahmed
+        public IActionResult GetBadTRequest(int id, int age) // validation erroe
         {
             return BadRequest();//400
         }
