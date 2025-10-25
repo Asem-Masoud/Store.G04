@@ -11,6 +11,7 @@ namespace Store.G04.Services.Specifications.Products
         //    Includes.Add(p => p.Brand);
         //    Includes.Add(p => p.Type);
         //}
+
         public ProductsWithBrandAndTypeSpecification(int id) : base(P => P.Id == id)
         {
             ApplyIncludes();

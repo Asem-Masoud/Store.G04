@@ -21,7 +21,7 @@ namespace Store.G04.Presentation
         {
             if (id is null) return BadRequest(); //400
             var result = await _serviceManger.ProductService.GetProductByIdAsync(id.Value);
-            if (result is null) return NotFound(); //400
+            //if (result is null) return NotFound(); //400
             return Ok(result); //200
         }
 

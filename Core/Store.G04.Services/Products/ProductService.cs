@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Store.G04.Domain.Contracts;
 using Store.G04.Domain.Entities.Products;
+using Store.G04.Domain.Exceptions;
 using Store.G04.Services.Abstractions.Products;
+using Store.G04.Services.Specifications;
 using Store.G04.Services.Specifications.Products;
 using Store.G04.Shared;
 using Store.G04.Shared.Dtos.Products;
@@ -42,6 +44,8 @@ namespace Store.G04.Services.Products
 
             //var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(id);
             var product = await _unitOfWork.GetRepository<int, Product>().GetAsync(spec); // Apply Specifications
+            //if (product is null) return null;
+            if (product is null) throw new ProductNotFoundException(id);
             var result = _mapper.Map<ProductResponse>(product);
             return result;
         }

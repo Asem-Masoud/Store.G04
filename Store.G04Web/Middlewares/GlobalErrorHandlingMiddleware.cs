@@ -1,4 +1,6 @@
-﻿using Store.G04.Shared.ErrorModels;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Store.G04.Domain.Exceptions;
+using Store.G04.Shared.ErrorModels;
 
 namespace Store.G04Web.Middlewares
 {
@@ -34,9 +36,17 @@ namespace Store.G04Web.Middlewares
 
                 var response = new ErrorDetails()
                 {
-                    StatusCode = StatusCodes.Status500InternalServerError,
+                    //StatusCode = StatusCodes.Status500InternalServerError,
                     ErrorMessage = ex.Message
                 };
+
+                response.StatusCode = ex switch
+                {
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    _ => StatusCodes.Status500InternalServerError
+                };
+
+                context.Response.StatusCode = response.StatusCode;
 
                 await context.Response.WriteAsJsonAsync(response);
             }
