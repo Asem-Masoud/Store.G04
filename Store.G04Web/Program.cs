@@ -21,19 +21,24 @@ namespace Store.G04Web
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(); // APIController
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // DB
+            /*
             builder.Services.AddDbContext<StoreDbContext>(Options =>
             {
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
-            builder.Services.AddScoped<IDbInitializer, DbInitialize>(); // Initialize Db
+            builder.Services.AddScoped<IDbInitializer, DbInitialize>(); // Allow DI For DbInitializer
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IServiceManger, ServiceManger>();
+            */
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+
+            builder.Services.AddScoped<IServiceManger, ServiceManger>(); // Mapping
             builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile(builder.Configuration)));
 
             builder.Services.Configure<ApiBehaviorOptions>(config =>
@@ -57,6 +62,8 @@ namespace Store.G04Web
 
             var app = builder.Build();
 
+            // Configure the HTTP request pipeline.
+
             #region Initialize Db
             using var scope = app.Services.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>(); // ASK CLR to Create object From IDbInitializer
@@ -65,7 +72,7 @@ namespace Store.G04Web
 
             app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
-            // Configure the HTTP request pipeline.
+            //// Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
