@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Store.G04.Domain.Exceptions;
+using Store.G04.Domain.Exceptions.BadRequest;
 using Store.G04.Shared.ErrorModels;
 
 namespace Store.G04Web.Middlewares
@@ -54,6 +55,7 @@ namespace Store.G04Web.Middlewares
             response.StatusCode = ex switch
             {
                 NotFoundException => StatusCodes.Status404NotFound,
+                BadRequestException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
 
