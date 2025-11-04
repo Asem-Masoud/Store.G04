@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Store.G04.Persistence.Repositories
 {
-    public class ChacheRepository(IConnectionMultiplexer connection) : IChacheRepository
+    public class CacheRepository(IConnectionMultiplexer connection) : ICacheRepository
     {
         private readonly IDatabase _database = connection.GetDatabase();
         public async Task<string?> GetAsync(string key)

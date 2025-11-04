@@ -19,6 +19,7 @@ namespace Store.G04.Persistence
             services.AddScoped<IDbInitializer, DbInitialize>(); // Allow DI For DbInitializer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<ICacheRepository, CacheRepository>();
 
             services.AddSingleton<IConnectionMultiplexer>((ServiceProvider) =>
             ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnection"))
