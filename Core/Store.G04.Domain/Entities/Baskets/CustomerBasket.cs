@@ -2,7 +2,7 @@
 {
     public class CustomerBasket
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public IEnumerable<BasketItem> Items { get; set; }
 
     }

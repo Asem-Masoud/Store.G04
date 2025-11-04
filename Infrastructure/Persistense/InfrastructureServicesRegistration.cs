@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using Store.G04.Domain.Contracts;
 using Store.G04.Persistence.Data.Contexts;
 
@@ -16,6 +17,10 @@ namespace Store.G04.Persistence
             });
             services.AddScoped<IDbInitializer, DbInitialize>(); // Allow DI For DbInitializer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddSingleton<IConnectionMultiplexer>((ServiceProvider) =>
+            ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnection"))
+            );
 
             return services;
         }
