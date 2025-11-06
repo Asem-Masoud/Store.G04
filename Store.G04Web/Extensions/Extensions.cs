@@ -4,6 +4,9 @@ using Store.G04.Persistence;
 using Store.G04.Services;
 using Store.G04.Domain.Contracts;
 using Store.G04Web.Middlewares;
+using Store.G04.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using Store.G04.Persistence.Identity.Contexts;
 
 namespace Store.G04Web.Extensions
 {
@@ -21,6 +24,7 @@ namespace Store.G04Web.Extensions
 
             services.configureServices();
 
+            services.AddIdentityService();
 
             return services;
         }
@@ -62,6 +66,16 @@ namespace Store.G04Web.Extensions
 
             return services;
         }
+        private static IServiceCollection AddIdentityService(this IServiceCollection services)
+        {
+            services.AddIdentityCore<AppUser>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<IdentityStoreDbContext>();
+            return services;
+        }
+
 
         public static async Task<WebApplication> ConfigureMiddleWares(this WebApplication app)
         {
@@ -87,13 +101,12 @@ namespace Store.G04Web.Extensions
             return app;
         }
 
-        private static async Task<WebApplication> InitializeDbAsync(this WebApplication app)
+        private static async Task<WebApplication> InitializeDbAsync/*SeedData*/(this WebApplication app)
         {
-            #region Initialize Db
             using var scope = app.Services.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>(); // ASK CLR to Create object From IDbInitializer
             await dbInitializer.InitializeAsync();
-            #endregion
+            await dbInitializer.InitializeIdentityAsync();
 
             return app;
         }

@@ -1,13 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Store.G04.Domain.Contracts;
+using Store.G04.Domain.Entities.Identity;
 using Store.G04.Domain.Entities.Products;
 using Store.G04.Persistence.Data.Contexts;
+using Store.G04.Persistence.Identity.Contexts;
 using System.Text.Json;
 
 namespace Store.G04.Persistence
 {
     // CLR
-    public class DbInitialize(StoreDbContext _context) /*Primary Constructor*/ : IDbInitializer
+    public class DbInitialize
+        (StoreDbContext _context,
+        IdentityStoreDbContext _identityContext,
+        UserManager<AppUser> _userManager,
+        RoleManager<IdentityRole> _roleManager
+        ) /*Primary Constructor*/ : IDbInitializer
     {
 
         public async Task InitializeAsync()
@@ -72,6 +80,48 @@ namespace Store.G04.Persistence
             }
 
             _context.SaveChangesAsync();
+        }
+
+        public async Task InitializeIdentityAsync()
+        {
+            // 1. Create DB
+            // 2. Update DB
+            if (_identityContext.Database.GetPendingMigrationsAsync().GetAwaiter().GetResult().Any())
+            {
+                await _identityContext.Database.MigrateAsync();
+            }
+
+            // 3. Data seed
+            if (!_identityContext.Roles.Any())
+            {
+                await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+
+            if (!_identityContext.Users.Any())
+            {
+                var superAdmin = new AppUser
+                {
+                    DisplayName = "SuperAdmin",
+                    UserName = "SuperAdmin",
+                    Email = "SuperAdmin@gmail.com",
+                    PhoneNumber = "01234567890"
+                };
+
+                var admin = new AppUser
+                {
+                    DisplayName = "Admin",
+                    UserName = "Admin",
+                    Email = "Admin@gmail.com",
+                    PhoneNumber = "01234567890"
+                };
+
+                await _userManager.CreateAsync(superAdmin, "P@ssW0rd");
+                await _userManager.CreateAsync(admin, "P@ssW0rd");
+
+                await _userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
+                await _userManager.AddToRoleAsync(admin, "Admin");
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Store.G04.Domain.Exceptions;
 using Store.G04.Domain.Exceptions.BadRequest;
+using Store.G04.Domain.Exceptions.UnAuthorized;
 using Store.G04.Shared.ErrorModels;
 
 namespace Store.G04Web.Middlewares
@@ -56,6 +57,7 @@ namespace Store.G04Web.Middlewares
             {
                 NotFoundException => StatusCodes.Status404NotFound,
                 BadRequestException => StatusCodes.Status400BadRequest,
+                UnAuthorizedException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError
             };
 

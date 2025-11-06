@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Store.G04.Domain.Contracts;
 using Store.G04.Persistence.Data.Contexts;
+using Store.G04.Persistence.Identity.Contexts;
 using Store.G04.Persistence.Repositories;
 
 namespace Store.G04.Persistence
@@ -16,6 +17,12 @@ namespace Store.G04.Persistence
             {
                 Options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddDbContext<IdentityStoreDbContext>(Options =>
+            {
+                Options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
+            });
+
             services.AddScoped<IDbInitializer, DbInitialize>(); // Allow DI For DbInitializer
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBasketRepository, BasketRepository>();
