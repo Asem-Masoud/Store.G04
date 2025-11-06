@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Store.G04.Domain.Entities.Identity;
 using Store.G04.Domain.Exceptions;
 using Store.G04.Domain.Exceptions.BadRequest;
 using Store.G04.Domain.Exceptions.UnAuthorized;
 using Store.G04.Services.Abstractions.Auth;
 using Store.G04.Shared.Dtos.Auth;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Store.G04.Services.Auth
 {
@@ -20,7 +25,8 @@ namespace Store.G04.Services.Auth
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "TODO"
+                //Token = "TODO"
+                Token = await GenerateTokenAsync(user)
             };
         }
 
@@ -39,8 +45,46 @@ namespace Store.G04.Services.Auth
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "TODO"
+                //Token = "TODO"
+                Token = await GenerateTokenAsync(user)
+
             };
+        }
+
+        private async Task<string> GenerateTokenAsync(AppUser user)
+        {
+            // Token 
+            // 1. Header     (type,Algo)
+            // 2. Payload    (claims)
+            // 3. Signature  (Key)
+
+            var authClaims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.GivenName, user.DisplayName),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+            };
+
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            // STRONGSECURITYKEYFORAUTHENTICATIONSTRONGSECURITYKEYFORAUTHENTICATIONSTRONGSECURITYKEYFORAUTHENTICATIONSTRONGSECURITYKEYFORAUTHENTICATION
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("STRONGSECURITYKEYFORAUTHENTICATIONSTRONGSECURITYKEYFORAUTHENTICATIONSTRONGSECURITYKEYFORAUTHENTICATIONSTRONGSECURITYKEYFORAUTHENTICATION")
+                );
+
+            var token = new JwtSecurityToken(
+                issuer: "https://localhost:7282/",
+                audience: "MyStore",
+                claims: authClaims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+
         }
     }
 }
