@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Store.G04.Shared.ErrorModels;
-using Store.G04.Persistence;
-using Store.G04.Services;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Store.G04.Domain.Contracts;
-using Store.G04Web.Middlewares;
 using Store.G04.Domain.Entities.Identity;
-using Microsoft.AspNetCore.Identity;
+using Store.G04.Persistence;
 using Store.G04.Persistence.Identity.Contexts;
+using Store.G04.Services;
 using Store.G04.Shared;
+using Store.G04.Shared.ErrorModels;
+using Store.G04Web.Middlewares;
+using System.Text;
 
 namespace Store.G04Web.Extensions
 {
@@ -28,6 +31,8 @@ namespace Store.G04Web.Extensions
             services.AddIdentityService();
 
             services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
+
+            services.AddAuthenticationService(configuration);
 
             return services;
         }
@@ -52,17 +57,42 @@ namespace Store.G04Web.Extensions
                 config.InvalidModelStateResponseFactory = (actionContext) =>
                 {
                     var errors = actionContext.ModelState.Where(m => m.Value.Errors.Any())
-                      .Select(m => new ValidationError()
-                      {
-                          Field = m.Key,
-                          Errors = m.Value.Errors.Select(e => e.ErrorMessage)
-                      });
+                                                         .Select(m => new ValidationError()
+                                                         {
+                                                             Field = m.Key,
+                                                             Errors = m.Value.Errors.Select(e => e.ErrorMessage)
+                                                         });
 
                     var response = new ValidationErrorResponse()
                     {
                         Errors = errors
                     };
                     return new BadRequestObjectResult(response);
+                };
+            });
+
+
+            return services;
+        }
+        private static IServiceCollection AddAuthenticationService(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtOptions = configuration.GetSection("JwtOptions").Get<JwtOptions>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Bearer";
+                options.DefaultChallengeScheme = "Bearer";
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwtOptions.Audience,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecurityKey)),
                 };
             });
 
@@ -98,6 +128,7 @@ namespace Store.G04Web.Extensions
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllers();
 
