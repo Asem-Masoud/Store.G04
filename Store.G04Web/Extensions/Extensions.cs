@@ -7,6 +7,7 @@ using Store.G04Web.Middlewares;
 using Store.G04.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Store.G04.Persistence.Identity.Contexts;
+using Store.G04.Shared;
 
 namespace Store.G04Web.Extensions
 {
@@ -25,6 +26,8 @@ namespace Store.G04Web.Extensions
             services.configureServices();
 
             services.AddIdentityService();
+
+            services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
 
             return services;
         }
